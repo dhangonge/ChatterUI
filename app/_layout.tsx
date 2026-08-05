@@ -5,6 +5,7 @@ import { KeyboardProvider } from 'react-native-keyboard-controller'
 
 import { AlertProvider } from '@components/views/Alert'
 import { PortalHost } from '@components/views/Portal'
+import '@lib/i18n'
 import { useAppStateNotificationObserver } from '@lib/notifications/Notifications'
 import { Theme } from '@lib/theme/ThemeManager'
 
