@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Image, Modal, StyleSheet, Text, View } from 'react-native'
 import Animated, { FadeInDown } from 'react-native-reanimated'
 import { useShallow } from 'zustand/react/shallow'
@@ -16,6 +17,7 @@ type AvatarViewerProps = {
 }
 
 const AvatarViewer: React.FC<AvatarViewerProps> = ({ editorButton = true }) => {
+    const { t } = useTranslation()
     const router = useRouter()
     const styles = useStyles()
 
@@ -80,7 +82,7 @@ const AvatarViewer: React.FC<AvatarViewerProps> = ({ editorButton = true }) => {
                     <View style={styles.buttonContainer}>
                         {editorButton && (
                             <ThemedButton
-                                label="Edit Character"
+                                label={t('Edit Character')}
                                 iconName="edit"
                                 iconSize={18}
                                 variant="secondary"
@@ -96,7 +98,7 @@ const AvatarViewer: React.FC<AvatarViewerProps> = ({ editorButton = true }) => {
                         )}
 
                         <ThemedButton
-                            label="Close"
+                            label={t('Close')}
                             iconName="close"
                             iconSize={18}
                             variant="secondary"

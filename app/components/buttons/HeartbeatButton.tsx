@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import { Theme } from '@lib/theme/ThemeManager'
@@ -31,23 +32,24 @@ const HeartbeatButton: React.FC<HeartbeatButtonProps> = ({
             return ''
         }
     },
-    messageNeutral = 'Not Connected',
-    messageError = 'Failed To Connect',
-    messageOK = 'Connected',
+    messageNeutral,
+    messageError,
+    messageOK,
     headers = {},
     callback = () => {},
 }) => {
+    const { t } = useTranslation()
     const { color } = Theme.useTheme()
     const [status, setStatus] = useState<ResponseStatus>(ResponseStatus.DEFAULT)
 
     const StatusMessage = () => {
         switch (status) {
             case ResponseStatus.DEFAULT:
-                return messageNeutral
+                return messageNeutral ?? t('Not Connected')
             case ResponseStatus.ERROR:
-                return messageError
+                return messageError ?? t('Failed To Connect')
             case ResponseStatus.OK:
-                return messageOK
+                return messageOK ?? t('Connected')
         }
     }
 
@@ -90,7 +92,7 @@ const HeartbeatButton: React.FC<HeartbeatButtonProps> = ({
 
     return (
         <View style={{ flexDirection: 'row', marginTop: 8 }}>
-            <ThemedButton label="Test" onPress={handleCheck} variant="secondary" />
+            <ThemedButton label={t('Test')} onPress={handleCheck} variant="secondary" />
             <View
                 style={{
                     marginLeft: 4,

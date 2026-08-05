@@ -1,5 +1,6 @@
 import { AntDesign } from '@expo/vector-icons'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     Text,
     TextInput,
@@ -35,12 +36,13 @@ const StringArrayEditor: React.FC<StringArrayEditorProps> = ({
     setValue,
     replaceNewLine = undefined,
     allowDuplicates = false,
-    placeholder = 'Enter value...',
+    placeholder,
     allowBlank = false,
     suggestions = [],
     filterOnly = false,
     showSuggestionsOnEmpty = false,
 }) => {
+    const { t } = useTranslation()
     const { color, borderRadius } = Theme.useTheme()
     const styles = useStyles()
     const [newData, setNewData] = useState('')
@@ -53,11 +55,11 @@ const StringArrayEditor: React.FC<StringArrayEditorProps> = ({
 
     const addData = (newData: string) => {
         if (newData === '') {
-            Logger.warnToast('Value cannot be empty')
+            Logger.warnToast(t('Value cannot be empty'))
             return
         }
         if (value.includes(newData)) {
-            Logger.warnToast('Value already exists')
+            Logger.warnToast(t('Value already exists'))
             return
         }
         setNewData('')
@@ -94,7 +96,7 @@ const StringArrayEditor: React.FC<StringArrayEditorProps> = ({
                         }}>
                         {!filterOnly && (
                             <Text style={{ color: color.text._400, marginBottom: 4 }}>
-                                Suggestions
+                                {t('Suggestions')}
                             </Text>
                         )}
                         <ScrollView
@@ -129,11 +131,13 @@ const StringArrayEditor: React.FC<StringArrayEditorProps> = ({
                         onChangeText={setNewData}
                         keyboardType="default"
                         multiline
-                        placeholder={placeholder}
+                        placeholder={placeholder ?? t('Enter value...')}
                         placeholderTextColor={color.text._700}
                     />
 
-                    {!filterOnly && <ThemedButton label="Add" onPress={() => addData(newData)} />}
+                    {!filterOnly && (
+                        <ThemedButton label={t('Add')} onPress={() => addData(newData)} />
+                    )}
                 </View>
             </View>
         </View>
