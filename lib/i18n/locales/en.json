@@ -378,5 +378,10 @@
     "\\n\\n(This will not delete external model files, just this entry)": "\\n\\n(This will not delete external model files, just this entry)",
     "\\n\\nThis operation will clear up {{size}}": "\\n\\nThis operation will clear up {{size}}",
     "to open the Users drawer": "to open the Users drawer",
-    "{{count}} Items Selected": "{{count}} Items Selected"
+    "{{count}} Items Selected": "{{count}} Items Selected",
+    "Sampler": "Sampler",
+    "API": "API",
+    "Models": "Models",
+    "[DEV] Components": "[DEV] Components",
+    "[DEV] ColorTest": "[DEV] ColorTest"
 }

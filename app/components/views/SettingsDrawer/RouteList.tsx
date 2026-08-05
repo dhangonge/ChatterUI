@@ -1,5 +1,6 @@
 import { AntDesign } from '@expo/vector-icons'
 import { Href, useRouter } from 'expo-router'
+import { useTranslation } from 'react-i18next'
 import { FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { useMMKVBoolean } from 'react-native-mmkv'
 import Animated, { Easing, SlideInLeft } from 'react-native-reanimated'
@@ -23,6 +24,7 @@ const DrawerButton = ({ item, index }: DrawerButtonProps) => {
     const styles = useStyles()
     const router = useRouter()
     const { color } = Theme.useTheme()
+    const { t } = useTranslation()
     return (
         <Animated.View
             key={index}
@@ -35,7 +37,7 @@ const DrawerButton = ({ item, index }: DrawerButtonProps) => {
                     router.push(item.path)
                 }}>
                 <AntDesign size={24} name={item.icon ?? 'question'} color={color.text._400} />
-                <Text style={styles.largeButtonText}>{item.name}</Text>
+                <Text style={styles.largeButtonText}>{t(item.name)}</Text>
             </TouchableOpacity>
         </Animated.View>
     )

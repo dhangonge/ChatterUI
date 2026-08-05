@@ -378,5 +378,10 @@
     "\\n\\n(This will not delete external model files, just this entry)": "\\n\\n（这不会删除外部模型文件，仅删除此条目）",
     "\\n\\nThis operation will clear up {{size}}": "\\n\\n此操作将释放 {{size}}",
     "to open the Users drawer": "打开用户抽屉",
-    "{{count}} Items Selected": "已选择 {{count}} 项"
+    "{{count}} Items Selected": "已选择 {{count}} 项",
+    "Sampler": "采样器",
+    "API": "API",
+    "Models": "模型",
+    "[DEV] Components": "[DEV] 组件",
+    "[DEV] ColorTest": "[DEV] 颜色测试"
 }
