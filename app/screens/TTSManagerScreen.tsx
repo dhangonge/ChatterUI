@@ -1,5 +1,6 @@
 import * as Speech from 'expo-speech'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 
@@ -20,6 +21,7 @@ type LanguageListItem = {
 }
 
 const TTSManagerScreen = () => {
+    const { t } = useTranslation()
     const { color } = Theme.useTheme()
     const { voice, setVoice, enabled, setEnabled, auto, setAuto, rate, setRate, live, setLive } =
         useTTS()
@@ -50,11 +52,11 @@ const TTSManagerScreen = () => {
                 paddingHorizontal: 16,
             }}
             contentContainerStyle={{ rowGap: 8 }}>
-            <HeaderTitle title="TTS" />
-            <SectionTitle>Settings</SectionTitle>
+            <HeaderTitle title={t('TTS')} />
+            <SectionTitle>{t('Settings')}</SectionTitle>
 
             <ThemedSwitch
-                label="Enable"
+                label={t('Enable')}
                 value={enabled}
                 onChangeValue={(value) => {
                     if (value) {
@@ -71,7 +73,7 @@ const TTSManagerScreen = () => {
                     }
                     setAuto(value)
                 }}
-                label="Automatically TTS After Inference"
+                label={t('Automatically TTS After Inference')}
             />
 
             <ThemedSwitch
@@ -82,11 +84,11 @@ const TTSManagerScreen = () => {
                     }
                     setLive(value)
                 }}
-                label="Automatically TTS During Inference"
+                label={t('Automatically TTS During Inference')}
             />
 
             <ThemedSlider
-                label="Speed"
+                label={t('Speed')}
                 min={0.1}
                 max={2.5}
                 step={0.1}
@@ -96,7 +98,7 @@ const TTSManagerScreen = () => {
             />
 
             <SectionTitle style={{ marginTop: 8 }}>
-                Language ({Object.keys(languageList).length})
+                {t('Language ({{count}})', { count: Object.keys(languageList).length })}
             </SectionTitle>
             <View style={{ marginTop: 8 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: 8 }}>
@@ -105,7 +107,7 @@ const TTSManagerScreen = () => {
                         selected={lang}
                         data={languages}
                         labelExtractor={(item) => item}
-                        placeholder="Select Language"
+                        placeholder={t('Select Language')}
                         onChangeValue={(item) => setLang(item)}
                     />
                     <ThemedButton
@@ -118,17 +120,19 @@ const TTSManagerScreen = () => {
             </View>
 
             <SectionTitle style={{ marginTop: 8 }}>
-                Voices ({modelList.filter((item) => item.language === lang).length})
+                {t('Voices ({{count}})', {
+                    count: modelList.filter((item) => item.language === lang).length,
+                })}
             </SectionTitle>
 
             <DropdownSheet
                 style={{ marginBottom: 8 }}
                 search
-                modalTitle="Select Voice"
+                modalTitle={t('Select Voice')}
                 selected={voice}
                 data={languageList?.[lang] ?? []}
                 labelExtractor={(item) => item.identifier}
-                placeholder="Select Voice"
+                placeholder={t('Select Voice')}
                 onChangeValue={(item) => setVoice(item)}
             />
             <View
@@ -144,11 +148,11 @@ const TTSManagerScreen = () => {
                     style={{ color: color.text._400, fontStyle: 'italic' }}
                 />
                 <ThemedButton
-                    label="Test"
+                    label={t('Test')}
                     variant="secondary"
                     onPress={() => {
                         if (voice === undefined) {
-                            Logger.warnToast(`No Speaker Chosen`)
+                            Logger.warnToast(t('No Speaker Chosen'))
                             return
                         }
                         Speech.speak(testAudioText, {

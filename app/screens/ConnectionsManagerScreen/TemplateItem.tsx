@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import ThemedButton from '@components/buttons/ThemedButton'
@@ -14,18 +15,21 @@ type TemplateItemProps = {
 }
 
 const TemplateItem: React.FC<TemplateItemProps> = ({ item, index }) => {
+    const { t } = useTranslation()
     const { color, spacing, borderWidth, fontSize, borderRadius } = Theme.useTheme()
 
     const removeTemplate = APIManager.useConnectionsStore((state) => state.removeTemplate)
 
     const handleDelete = () => {
         Alert.alert({
-            title: 'Delete Template',
-            description: `Are you sure you want to delete "${item.name}"?`,
+            title: t('Delete Template'),
+            description: t('Are you sure you want to delete "{{name}}"?', {
+                name: item.name,
+            }),
             buttons: [
-                { label: 'Cancel' },
+                { label: t('Cancel') },
                 {
-                    label: 'Delete Template',
+                    label: t('Delete Template'),
                     onPress: () => {
                         removeTemplate(index)
                     },
@@ -37,7 +41,7 @@ const TemplateItem: React.FC<TemplateItemProps> = ({ item, index }) => {
 
     const handleExport = () => {
         saveStringToDownload(JSON.stringify(item), `${item.name}.json`, 'utf8').then(() => {
-            Logger.infoToast(`Saved ${item.name}.json To Downloads`)
+            Logger.infoToast(t('Saved {{name}}.json To Downloads', { name: item.name }))
         })
     }
 

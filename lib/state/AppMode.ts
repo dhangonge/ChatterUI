@@ -6,6 +6,7 @@ import { useShallow } from 'zustand/react/shallow'
 import Alert from '@components/views/Alert'
 import { Llama } from '@lib/engine/Local/LlamaLocal'
 import { Storage } from '@lib/enums/Storage'
+import i18n from '@lib/i18n'
 import { createMMKVStorage } from '@lib/storage/MMKV'
 
 type AppMode = 'local' | 'remote'
@@ -45,20 +46,21 @@ export const useAppMode = () => {
         (mode: AppMode) => {
             if (!!context && mode === 'remote') {
                 Alert.alert({
-                    title: 'Model Loaded',
-                    description:
-                        'A model is currently loaded. Do you want to unload it before swapping modes?',
+                    title: i18n.t('Model Loaded'),
+                    description: i18n.t(
+                        'A model is currently loaded. Do you want to unload it before swapping modes?'
+                    ),
                     buttons: [
                         {
-                            label: 'Swap Anyways',
+                            label: i18n.t('Swap Anyways'),
                             onPress: async () => {
                                 setAppModeInternal(mode)
                             },
                             type: 'warning',
                         },
-                        { label: 'Cancel' },
+                        { label: i18n.t('Cancel') },
                         {
-                            label: 'Unload',
+                            label: i18n.t('Unload'),
                             onPress: async () => {
                                 await unload()
                                 setAppModeInternal(mode)

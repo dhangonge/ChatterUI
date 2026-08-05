@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -28,6 +29,7 @@ const ConnectionEditor: React.FC<ConnectionEditorProps> = ({
     close,
     originalValues,
 }) => {
+    const { t } = useTranslation()
     const { color, fontSize } = Theme.useTheme()
     const styles = useStyles()
 
@@ -46,13 +48,13 @@ const ConnectionEditor: React.FC<ConnectionEditorProps> = ({
     useEffect(() => {
         const newTemplate = getTemplates().find((item) => item.name === values.configName)
         if (!newTemplate) {
-            Logger.errorToast('Could not get valid template!')
+            Logger.errorToast(t('Could not get valid template!'))
             close()
             return
         }
 
         setTemplate(newTemplate)
-    }, [close, values, getTemplates])
+    }, [close, values, getTemplates, t])
 
     const handleGetModelList = useCallback(async () => {
         if (!template.features.useModel || !show) return
@@ -95,7 +97,7 @@ const ConnectionEditor: React.FC<ConnectionEditorProps> = ({
                         fontWeight: '500',
                         paddingBottom: 16,
                     }}>
-                    Edit Connection
+                    {t('Edit Connection')}
                 </Text>
 
                 <ScrollView
@@ -103,7 +105,7 @@ const ConnectionEditor: React.FC<ConnectionEditorProps> = ({
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ rowGap: 12, paddingBottom: 32 }}>
                     <ThemedTextInput
-                        label="Friendly Name"
+                        label={t('Friendly Name')}
                         value={values.friendlyName}
                         onChangeText={(value) => {
                             setValues({ ...values, friendlyName: value })
@@ -113,20 +115,20 @@ const ConnectionEditor: React.FC<ConnectionEditorProps> = ({
                     {template.ui.editableCompletionPath && (
                         <View>
                             <ThemedTextInput
-                                label="Completion URL"
+                                label={t('Completion URL')}
                                 value={values.endpoint}
                                 onChangeText={(value) => {
                                     setValues({ ...values, endpoint: value })
                                 }}
                             />
-                            <Text style={styles.hintText}>Note: Use full URL path</Text>
+                            <Text style={styles.hintText}>{t('Note: Use full URL path')}</Text>
                         </View>
                     )}
 
                     {template.ui.editableModelPath && (
                         <View>
                             <ThemedTextInput
-                                label="Model URL"
+                                label={t('Model URL')}
                                 value={values.modelEndpoint}
                                 onChangeText={(value) => {
                                     setValues({ ...values, modelEndpoint: value })
@@ -151,7 +153,7 @@ const ConnectionEditor: React.FC<ConnectionEditorProps> = ({
                     {template.features.useKey && (
                         <ThemedTextInput
                             secureTextEntry
-                            label="API Key"
+                            label={t('API Key')}
                             value={values.key}
                             onChangeText={(value) => {
                                 setValues({ ...values, key: value })
@@ -161,7 +163,7 @@ const ConnectionEditor: React.FC<ConnectionEditorProps> = ({
 
                     {template.features.useModel && (
                         <View style={{ rowGap: 4 }}>
-                            <Text style={styles.title}>Model</Text>
+                            <Text style={styles.title}>{t('Model')}</Text>
                             <View
                                 style={{
                                     flexDirection: 'row',
@@ -180,7 +182,7 @@ const ConnectionEditor: React.FC<ConnectionEditorProps> = ({
                                             setValues({ ...values, model: item })
                                         }}
                                         search={modelList.length > 10}
-                                        modalTitle="Select Model"
+                                        modalTitle={t('Select Model')}
                                     />
                                 )}
                                 {template.features.multipleModels && (
@@ -195,7 +197,7 @@ const ConnectionEditor: React.FC<ConnectionEditorProps> = ({
                                             setValues({ ...values, model: item })
                                         }}
                                         search={modelList.length > 10}
-                                        modalTitle="Select Model"
+                                        modalTitle={t('Select Model')}
                                     />
                                 )}
                                 <ThemedButton
@@ -213,32 +215,34 @@ const ConnectionEditor: React.FC<ConnectionEditorProps> = ({
                     {template.features.useFirstMessage && (
                         <View>
                             <ThemedTextInput
-                                label="First Message"
+                                label={t('First Message')}
                                 value={values.firstMessage}
                                 onChangeText={(value) => {
                                     setValues({ ...values, firstMessage: value })
                                 }}
                             />
                             <Text style={styles.hintText}>
-                                Default first message sent to Claude
+                                {t('Default first message sent to Claude')}
                             </Text>
                         </View>
                     )}
                     {template.features.usePrefill && (
                         <View>
                             <ThemedTextInput
-                                label="Prefill"
+                                label={t('Prefill')}
                                 value={values.prefill}
                                 onChangeText={(value) => {
                                     setValues({ ...values, prefill: value })
                                 }}
                             />
-                            <Text style={styles.hintText}>Prefill before model response</Text>
+                            <Text style={styles.hintText}>
+                                {t('Prefill before model response')}
+                            </Text>
                         </View>
                     )}
                 </ScrollView>
                 <ThemedButton
-                    label="Save Changes"
+                    label={t('Save Changes')}
                     onPress={() => {
                         editValue(values, index)
                         close()

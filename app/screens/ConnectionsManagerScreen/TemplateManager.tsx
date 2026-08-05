@@ -1,5 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FlatList, Linking, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useShallow } from 'zustand/react/shallow'
@@ -18,6 +19,7 @@ import TemplateItem from './TemplateItem'
 const TemplateManager = () => {
     // eslint-disable-next-line react-compiler/react-compiler
     'use no memo'
+    const { t } = useTranslation()
     const { templates, addTemplate } = APIManager.useConnectionsStore(
         useShallow((state) => ({
             templates: state.customTemplates,
@@ -36,7 +38,7 @@ const TemplateManager = () => {
                 paddingBottom: spacing.xl2,
                 flex: 1,
             }}>
-            <HeaderTitle title="Template Manager" />
+            <HeaderTitle title={t('Template Manager')} />
             <HeaderButton
                 headerRight={() => (
                     <ContextMenu
@@ -44,7 +46,7 @@ const TemplateManager = () => {
                         placement="bottom"
                         buttons={[
                             {
-                                label: 'Import Template',
+                                label: t('Import Template'),
                                 icon: 'download',
                                 onPress: async (close) => {
                                     close()
@@ -56,7 +58,7 @@ const TemplateManager = () => {
                                 },
                             },
                             {
-                                label: 'Paste Template',
+                                label: t('Paste Template'),
                                 icon: 'file',
                                 onPress: (close) => {
                                     close()
@@ -64,7 +66,7 @@ const TemplateManager = () => {
                                 },
                             },
                             {
-                                label: 'Get Templates',
+                                label: t('Get Templates'),
                                 icon: 'github',
                                 onPress: (close) => {
                                     close()
@@ -74,7 +76,7 @@ const TemplateManager = () => {
                                 },
                             },
                             {
-                                label: 'Learn About Templates',
+                                label: t('Learn About Templates'),
                                 icon: 'info',
                                 onPress: (close) => {
                                     close()
@@ -95,11 +97,11 @@ const TemplateManager = () => {
                         const data = JSON.parse(e)
                         addTemplate(data)
                     } catch (e) {
-                        Logger.errorToast('Failed to import: ' + e)
+                        Logger.errorToast(t('Failed to import: {{error}}', { error: e }))
                     }
                 }}
                 multiline
-                title="Paste Template Here"
+                title={t('Paste Template Here')}
             />
             {templates.length > 0 && (
                 <FlatList
@@ -128,7 +130,7 @@ const TemplateManager = () => {
                             fontStyle: 'italic',
                             marginTop: spacing.l,
                         }}>
-                        No Custom Templates Added
+                        {t('No Custom Templates Added')}
                     </Text>
                 </View>
             )}

@@ -1,5 +1,6 @@
 import { Stack, useRouter } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useShallow } from 'zustand/react/shallow'
@@ -16,6 +17,7 @@ import { Theme } from '@lib/theme/ThemeManager'
 import { getNestedValue } from '@lib/utils/Parsing'
 
 const AddConnection = () => {
+    const { t } = useTranslation()
     const styles = useStyles()
     const router = useRouter()
     const { addValue, getTemplates } = APIManager.useConnectionsStore(
@@ -71,7 +73,7 @@ const AddConnection = () => {
 
     return (
         <SafeAreaView edges={['bottom']} style={styles.mainContainer}>
-            <Stack.Screen options={{ title: 'Add Connection' }} />
+            <Stack.Screen options={{ title: t('Add Connection') }} />
             <ScrollView
                 style={{ flex: 1 }}
                 showsVerticalScrollIndicator={false}
@@ -92,12 +94,12 @@ const AddConnection = () => {
                             model: undefined,
                         })
                     }}
-                    modalTitle="Select Connection Type"
+                    modalTitle={t('Select Connection Type')}
                     search
                 />
 
                 <ThemedTextInput
-                    label="Friendly Name"
+                    label={t('Friendly Name')}
                     value={values.friendlyName}
                     onChangeText={(value) => {
                         setValues({ ...values, friendlyName: value })
@@ -107,20 +109,20 @@ const AddConnection = () => {
                 {template.ui.editableCompletionPath && (
                     <View>
                         <ThemedTextInput
-                            label="Completion URL"
+                            label={t('Completion URL')}
                             value={values.endpoint}
                             onChangeText={(value) => {
                                 setValues({ ...values, endpoint: value })
                             }}
                         />
-                        <Text style={styles.hintText}>Note: Use full URL path</Text>
+                        <Text style={styles.hintText}>{t('Note: Use full URL path')}</Text>
                     </View>
                 )}
 
                 {template.ui.editableModelPath && (
                     <View>
                         <ThemedTextInput
-                            label="Model URL"
+                            label={t('Model URL')}
                             value={values.modelEndpoint}
                             onChangeText={(value) => {
                                 setValues({ ...values, modelEndpoint: value })
@@ -144,7 +146,7 @@ const AddConnection = () => {
 
                 {template.features.useKey && (
                     <ThemedTextInput
-                        label="API Key"
+                        label={t('API Key')}
                         secureTextEntry
                         value={values.key}
                         onChangeText={(value) => {
@@ -155,7 +157,7 @@ const AddConnection = () => {
 
                 {template.features.useModel && (
                     <View>
-                        <Text style={styles.title}>Model</Text>
+                        <Text style={styles.title}>{t('Model')}</Text>
                         <View
                             style={{
                                 flexDirection: 'row',
@@ -175,7 +177,7 @@ const AddConnection = () => {
                                         setValues({ ...values, model: item })
                                     }}
                                     search={modelList.length > 10}
-                                    modalTitle="Select Model"
+                                    modalTitle={t('Select Model')}
                                 />
                             )}
                             {template.features.multipleModels && (
@@ -190,7 +192,7 @@ const AddConnection = () => {
                                         setValues({ ...values, model: item })
                                     }}
                                     search={modelList.length > 10}
-                                    modalTitle="Select Model"
+                                    modalTitle={t('Select Model')}
                                 />
                             )}
                             <ThemedButton
@@ -208,30 +210,32 @@ const AddConnection = () => {
                 {template.features.useFirstMessage && (
                     <View>
                         <ThemedTextInput
-                            label="First Message"
+                            label={t('First Message')}
                             value={values.firstMessage}
                             onChangeText={(value) => {
                                 setValues({ ...values, firstMessage: value })
                             }}
                         />
-                        <Text style={styles.hintText}>Default first message sent to Claude</Text>
+                        <Text style={styles.hintText}>
+                            {t('Default first message sent to Claude')}
+                        </Text>
                     </View>
                 )}
                 {template.features.usePrefill && (
                     <View>
                         <ThemedTextInput
-                            label="Prefill"
+                            label={t('Prefill')}
                             value={values.prefill}
                             onChangeText={(value) => {
                                 setValues({ ...values, prefill: value })
                             }}
                         />
-                        <Text style={styles.hintText}>Prefill before model response</Text>
+                        <Text style={styles.hintText}>{t('Prefill before model response')}</Text>
                     </View>
                 )}
             </ScrollView>
             <ThemedButton
-                label="Create API"
+                label={t('Create API')}
                 onPress={() => {
                     addValue(values)
                     router.back()

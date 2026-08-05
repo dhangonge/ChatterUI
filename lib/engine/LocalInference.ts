@@ -1,6 +1,7 @@
 import Alert from '@components/views/Alert'
 import { AppSettings } from '@lib/constants/GlobalValues'
 import { SamplerConfigData, SamplerID, Samplers } from '@lib/constants/SamplerData'
+import i18n from '@lib/i18n'
 import { Characters } from '@lib/state/Characters'
 import { Chats, useInference } from '@lib/state/Chat'
 import { commonStopStrings, Instructs, outputPrefixes } from '@lib/state/Instructs'
@@ -186,7 +187,7 @@ const verifyModelLoaded = async (): Promise<boolean> => {
         const autoLoad = mmkv.getBoolean(AppSettings.AutoLoadLocal)
         // If  autoload is disabled, just return
         if (!autoLoad) {
-            Logger.warnToast('No Model Loaded')
+            Logger.warnToast(i18n.t('No Model Loaded'))
             return false
         }
 
@@ -222,7 +223,7 @@ export const localInference = async () => {
         const context = Llama.useLlamaModelStore.getState().context
 
         if (!context) {
-            Logger.warnToast('No Model Loaded')
+            Logger.warnToast(i18n.t('No Model Loaded'))
             stopGenerating()
             return
         }

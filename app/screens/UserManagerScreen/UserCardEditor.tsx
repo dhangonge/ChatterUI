@@ -1,6 +1,7 @@
 import { AntDesign } from '@expo/vector-icons'
 import * as DocumentPicker from 'expo-document-picker'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -15,6 +16,7 @@ import { useAvatarViewerStore } from '@lib/state/components/AvatarViewer'
 import { Theme } from '@lib/theme/ThemeManager'
 
 const UserCardEditor = () => {
+    const { t } = useTranslation()
     const styles = useStyles()
     const { color, spacing } = Theme.useTheme()
 
@@ -55,12 +57,12 @@ const UserCardEditor = () => {
 
     const handleDeleteImage = () => {
         Alert.alert({
-            title: `Delete Image`,
-            description: `Are you sure you want to delete this image? This cannot be undone.`,
+            title: t('Delete Image'),
+            description: t('Are you sure you want to delete this image? This cannot be undone.'),
             buttons: [
-                { label: 'Cancel' },
+                { label: t('Cancel') },
                 {
-                    label: 'Delete Image',
+                    label: t('Delete Image'),
                     onPress: () => {
                         Characters.deleteImage(imageID)
                     },
@@ -78,7 +80,7 @@ const UserCardEditor = () => {
                     placement="right"
                     buttons={[
                         {
-                            label: 'Change Image',
+                            label: t('Change Image'),
                             icon: 'picture',
                             onPress: (close) => {
                                 close()
@@ -86,7 +88,7 @@ const UserCardEditor = () => {
                             },
                         },
                         {
-                            label: 'View Image',
+                            label: t('View Image'),
                             icon: 'search',
                             onPress: (close) => {
                                 close()
@@ -94,7 +96,7 @@ const UserCardEditor = () => {
                             },
                         },
                         {
-                            label: 'Delete Image',
+                            label: t('Delete Image'),
                             icon: 'delete',
                             onPress: (close) => {
                                 close()
@@ -112,7 +114,7 @@ const UserCardEditor = () => {
                 <ThemedTextInput
                     multiline
                     numberOfLines={10}
-                    label="Name"
+                    label={t('Name')}
                     value={currentCard?.name ?? ''}
                     onChangeText={(text) => {
                         if (currentCard)
@@ -121,13 +123,13 @@ const UserCardEditor = () => {
                                 name: text,
                             })
                     }}
-                    placeholder="Empty names are discouraged!"
+                    placeholder={t('Empty names are discouraged!')}
                 />
             </View>
             <ThemedTextInput
                 multiline
                 numberOfLines={10}
-                label="Description"
+                label={t('Description')}
                 value={currentCard?.description ?? ''}
                 onChangeText={(text) => {
                     if (currentCard)
@@ -136,7 +138,7 @@ const UserCardEditor = () => {
                             description: text,
                         })
                 }}
-                placeholder="Describe this user..."
+                placeholder={t('Describe this user...')}
             />
             <View style={{ flex: 1, paddingBottom: spacing.m }} />
             <Text
@@ -145,10 +147,10 @@ const UserCardEditor = () => {
                     marginTop: spacing.xl2,
                     alignSelf: 'center',
                 }}>
-                Hint: Swipe Left or press <AntDesign name="menu-unfold" size={16} /> to open the
-                Users drawer
+                {t('Hint: Swipe Left or press')} <AntDesign name="menu-unfold" size={16} />{' '}
+                {t('to open the Users drawer')}
             </Text>
-            <ThemedButton label="Save" onPress={saveCard} iconName="save" />
+            <ThemedButton label={t('Save')} onPress={saveCard} iconName="save" />
         </View>
     )
 }
