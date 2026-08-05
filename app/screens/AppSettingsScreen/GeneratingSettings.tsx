@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import { useMMKVBoolean } from 'react-native-mmkv'
 
@@ -7,26 +8,27 @@ import SectionTitle from '@components/text/SectionTitle'
 import { AppSettings } from '@lib/constants/GlobalValues'
 
 const GeneratingSettings = () => {
+    const { t } = useTranslation()
     const [printContext, setPrintContext] = useMMKVBoolean(AppSettings.PrintContext)
     const [bypassContextLength, setBypassContextLength] = useMMKVBoolean(
         AppSettings.BypassContextLength
     )
     return (
         <View style={{ rowGap: 8 }}>
-            <SectionTitle>Generation</SectionTitle>
+            <SectionTitle>{t('Generation')}</SectionTitle>
 
             <ThemedSwitch
-                label="Print Context"
+                label={t('Print Context')}
                 value={printContext}
                 onChangeValue={setPrintContext}
-                description="Prints the generation context to logs for debugging"
+                description={t('Prints the generation context to logs for debugging')}
             />
 
             <ThemedSwitch
-                label="Bypass Context Length"
+                label={t('Bypass Context Length')}
                 value={bypassContextLength}
                 onChangeValue={setBypassContextLength}
-                description="Ignores context length limits when building prompts"
+                description={t('Ignores context length limits when building prompts')}
             />
         </View>
     )

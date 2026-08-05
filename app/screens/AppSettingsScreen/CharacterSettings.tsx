@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 
 import ThemedButton from '@components/buttons/ThemedButton'
@@ -8,20 +9,23 @@ import { Characters } from '@lib/state/Characters'
 import TagHiderSettings from './TagHiderSettings'
 
 const CharacterSettings = () => {
+    const { t } = useTranslation()
     return (
         <View style={{ rowGap: 8 }}>
-            <SectionTitle>Character Management</SectionTitle>
+            <SectionTitle>{t('Character Management')}</SectionTitle>
             <ThemedButton
-                label="Regenerate Default Card"
+                label={t('Regenerate Default Card')}
                 variant="secondary"
                 onPress={() => {
                     Alert.alert({
-                        title: `Regenerate Default Card`,
-                        description: `This will add the default AI Bot card to your character list.`,
+                        title: t('Regenerate Default Card'),
+                        description: t(
+                            'This will add the default AI Bot card to your character list.'
+                        ),
                         buttons: [
-                            { label: 'Cancel' },
+                            { label: t('Cancel') },
                             {
-                                label: 'Create Default Card',
+                                label: t('Create Default Card'),
                                 onPress: async () => await Characters.createDefaultCard(),
                             },
                         ],
