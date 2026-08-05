@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -10,6 +11,7 @@ import { useBackgroundStore } from '@lib/state/BackgroundImage'
 
 const StyleSettings = () => {
     const router = useRouter()
+    const { t } = useTranslation()
 
     const { chatBackground, importBackground, deleteBackground } = useBackgroundStore(
         useShallow((state) => ({
@@ -21,31 +23,32 @@ const StyleSettings = () => {
 
     return (
         <View style={{ rowGap: 8 }}>
-            <SectionTitle>Style</SectionTitle>
+            <SectionTitle>{t('Style')}</SectionTitle>
 
             <ThemedButton
-                label="Change Theme"
+                label={t('Change Theme')}
                 variant="secondary"
                 onPress={() => router.push('/screens/AppSettingsScreen/ColorSelector')}
             />
             <ThemedButton
-                label={chatBackground ? 'Replace Chat Background' : 'Import Chat Background'}
+                label={chatBackground ? t('Replace Chat Background') : t('Import Chat Background')}
                 variant="secondary"
                 onPress={importBackground}
             />
             {chatBackground && (
                 <ThemedButton
-                    label="Delete Chat Background"
+                    label={t('Delete Chat Background')}
                     variant="critical"
                     onPress={() =>
                         Alert.alert({
-                            title: 'Delete Background',
-                            description:
-                                'Are you sure you want to delete this background? This cannot be undone!',
+                            title: t('Delete Background'),
+                            description: t(
+                                'Are you sure you want to delete this background? This cannot be undone!'
+                            ),
                             buttons: [
-                                { label: 'Cancel' },
+                                { label: t('Cancel') },
                                 {
-                                    label: 'Delete Background',
+                                    label: t('Delete Background'),
                                     type: 'warning',
                                     onPress: deleteBackground,
                                 },
