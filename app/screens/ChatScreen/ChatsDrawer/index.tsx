@@ -1,6 +1,7 @@
 import { FlashList } from '@shopify/flash-list'
 import { useLiveQuery } from 'drizzle-orm/expo-sqlite'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 import { useShallow } from 'zustand/react/shallow'
@@ -19,6 +20,7 @@ import ChatDrawerItem from './ChatDrawerItem'
 import ChatDrawerSearchItem from './ChatDrawerSearchItem'
 
 const ChatsDrawer = () => {
+    const { t } = useTranslation()
     const styles = useStyles()
     const { charId } = Characters.useCharacterStore(useShallow((state) => ({ charId: state.id })))
     const { data } = useLiveQuery(Chats.db.query.chatListQuery(charId ?? 0), [charId])
@@ -71,7 +73,7 @@ const ChatsDrawer = () => {
         <Drawer.Body drawerID={Drawer.ID.CHATLIST} drawerStyle={styles.drawer} direction="right">
             <View
                 style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
-                <Text style={styles.drawerTitle}>{showSearchBar ? 'Search' : 'Chats'}</Text>
+                <Text style={styles.drawerTitle}>{showSearchBar ? t('Search') : t('Chats')}</Text>
                 <ThemedButton
                     variant="tertiary"
                     iconName={showSearchBar ? 'backward' : 'search'}
@@ -84,7 +86,7 @@ const ChatsDrawer = () => {
             <Animated.View key={showSearchBar + ''} entering={FadeIn} exiting={FadeOut}>
                 {showSearchBar && (
                     <ThemedTextInput
-                        placeholder="Search for message..."
+                        placeholder={t('Search for message...')}
                         containerStyle={{ flex: 0, marginTop: 12, marginBottom: 12 }}
                         value={searchQuery}
                         autoCorrect={false}
@@ -111,14 +113,16 @@ const ChatsDrawer = () => {
                         />
                     </Animated.View>
                     <Animated.View entering={FadeIn} exiting={FadeOut}>
-                        <ThemedButton label="Start New Chat" onPress={handleCreateChat} />
+                        <ThemedButton label={t('Start New Chat')} onPress={handleCreateChat} />
                     </Animated.View>
                 </>
             )}
             {showSearchResults && (
                 <Animated.View entering={FadeIn.duration(200)} style={styles.listContainer}>
                     {searchResults.length > 0 && (
-                        <Text style={styles.resultCount}>Results: {searchResults.length}</Text>
+                        <Text style={styles.resultCount}>
+                            {t('Results: {{count}}', { count: searchResults.length })}
+                        </Text>
                     )}
                     <FlashList
                         data={searchResults}
@@ -134,7 +138,7 @@ const ChatsDrawer = () => {
                         removeClippedSubviews={false}
                         ListEmptyComponent={() => (
                             <View style={styles.emptyContainer}>
-                                <Text style={styles.emptyText}>No Results</Text>
+                                <Text style={styles.emptyText}>{t('No Results')}</Text>
                             </View>
                         )}
                     />

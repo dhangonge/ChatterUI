@@ -1,5 +1,6 @@
 import { setStringAsync } from 'expo-clipboard'
 import React, { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import { useMMKVBoolean } from 'react-native-mmkv'
 import Animated, { StretchInY, StretchOutY, ZoomIn, ZoomOut } from 'react-native-reanimated'
@@ -39,6 +40,7 @@ interface ChatActionProps {
 }
 
 const ChatQuickActions: React.FC<ChatActionProps> = ({ index, nowGenerating, isLastMessage }) => {
+    const { t } = useTranslation()
     const { activeIndex, setShowOptions } = useChatActionsState(
         useShallow((state) => ({
             setShowOptions: state.setActiveIndex,
@@ -62,16 +64,16 @@ const ChatQuickActions: React.FC<ChatActionProps> = ({ index, nowGenerating, isL
     const handleFork = () => {
         if (!chatId) return
         Alert.alert({
-            title: 'Fork Chat',
-            description: 'This will create a clone of this chat from this message',
+            title: t('Fork Chat'),
+            description: t('This will create a clone of this chat from this message'),
             buttons: [
-                { label: 'Cancel' },
+                { label: t('Cancel') },
                 {
-                    label: 'Fork Chat',
+                    label: t('Fork Chat'),
                     onPress: async () => {
                         const newChatId = await Chats.db.mutate.cloneChatFromId(chatId, index + 1)
                         if (!newChatId) {
-                            Logger.errorToast('Failed to clone chat')
+                            Logger.errorToast(t('Failed to clone chat'))
                             return
                         }
                         setShowOptions(undefined)
@@ -186,10 +188,10 @@ const ChatQuickActions: React.FC<ChatActionProps> = ({ index, nowGenerating, isL
                                     if (showOptions) setShowOptions(undefined)
                                     setStringAsync(swipe.swipe)
                                         .then(() => {
-                                            Logger.infoToast('Copied')
+                                            Logger.infoToast(t('Copied'))
                                         })
                                         .catch(() => {
-                                            Logger.errorToast('Failed to copy to clipboard')
+                                            Logger.errorToast(t('Failed to copy to clipboard'))
                                         })
                                 }}
                             />

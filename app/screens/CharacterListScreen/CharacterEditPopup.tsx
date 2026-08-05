@@ -1,5 +1,6 @@
 import { usePathname, useRouter } from 'expo-router'
 import { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 
 import Alert from '@components/views/Alert'
@@ -21,6 +22,7 @@ const CharacterEditPopup: React.FC<CharacterEditPopupProps> = ({
     nowLoading,
     children,
 }) => {
+    const { t } = useTranslation()
     const path = usePathname()
     const router = useRouter()
 
@@ -36,14 +38,14 @@ const CharacterEditPopup: React.FC<CharacterEditPopupProps> = ({
                 chatId = await Chats.db.mutate.createChat(character.id)
             }
             if (!chatId) {
-                Logger.errorToast('Chat creation backup has failed! Please report.')
+                Logger.errorToast(t('Chat creation backup has failed! Please report.'))
                 return
             }
             await loadChat(chatId)
             setNowLoading(false)
             router.push('/screens/ChatScreen')
         } catch (error) {
-            Logger.errorToast(`Couldn't load character: ${error}`)
+            Logger.errorToast(t("Couldn't load character: {{error}}", { error }))
             setNowLoading(false)
         }
     }
@@ -53,14 +55,16 @@ const CharacterEditPopup: React.FC<CharacterEditPopupProps> = ({
     const deleteCard = (close: () => void) => {
         close()
         Alert.alert({
-            title: 'Delete Character',
-            description: `Are you sure you want to delete '${character.name}'?\nThis cannot be undone.`,
+            title: t('Delete Character'),
+            description: t("Are you sure you want to delete '{{name}}'?\nThis cannot be undone.", {
+                name: character.name,
+            }),
             buttons: [
                 {
-                    label: 'Cancel',
+                    label: t('Cancel'),
                 },
                 {
-                    label: 'Delete Character',
+                    label: t('Delete Character'),
                     onPress: async () => {
                         Characters.db.mutate.deleteCard(character.id ?? -1)
                     },
@@ -73,14 +77,16 @@ const CharacterEditPopup: React.FC<CharacterEditPopupProps> = ({
     const cloneCard = (close: () => void) => {
         close()
         Alert.alert({
-            title: 'Clone Character',
-            description: `Are you sure you want to clone '${character.name}'?`,
+            title: t('Clone Character'),
+            description: t("Are you sure you want to clone '{{name}}'?", {
+                name: character.name,
+            }),
             buttons: [
                 {
-                    label: 'Cancel',
+                    label: t('Cancel'),
                 },
                 {
-                    label: 'Clone Character',
+                    label: t('Clone Character'),
                     onPress: async () => {
                         setNowLoading(true)
                         await Characters.db.mutate.duplicateCard(character.id)
@@ -108,9 +114,9 @@ const CharacterEditPopup: React.FC<CharacterEditPopupProps> = ({
             longPress
             delayLongPress={300}
             buttons={[
-                { label: 'Edit', icon: 'edit', onPress: editCharacter },
-                { label: 'Clone', icon: 'copy', onPress: cloneCard },
-                { label: 'Delete', icon: 'delete', onPress: deleteCard, variant: 'warning' },
+                { label: t('Edit'), icon: 'edit', onPress: editCharacter },
+                { label: t('Clone'), icon: 'copy', onPress: cloneCard },
+                { label: t('Delete'), icon: 'delete', onPress: deleteCard, variant: 'warning' },
             ]}
             placement="center">
             <View pointerEvents="none">{children}</View>

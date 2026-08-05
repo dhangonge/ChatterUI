@@ -2,6 +2,7 @@ import { count, eq, notInArray } from 'drizzle-orm'
 import { useLiveQuery } from 'drizzle-orm/expo-sqlite'
 import { useFocusEffect } from 'expo-router'
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BackHandler, Text, View } from 'react-native'
 import { useMMKVBoolean } from 'react-native-mmkv'
 import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated'
@@ -25,6 +26,7 @@ type CharacterListHeaderProps = {
 }
 
 const CharacterListHeader: React.FC<CharacterListHeaderProps> = ({ resultLength }) => {
+    const { t } = useTranslation()
     const [useTagHider, setUseTagHider] = useMMKVBoolean(AppSettings.UseTagHider)
     const { showSearch, setShowSearch, textFilter, setTextFilter, tagFilter, setTagFilter } =
         CharacterSorter.useSorterStore(
@@ -90,10 +92,10 @@ const CharacterListHeader: React.FC<CharacterListHeaderProps> = ({ resultLength 
                             color: color.text._400,
                             fontSize: 16,
                         }}>
-                        Sort By
+                        {t('Sort By')}
                     </Text>
-                    <SortButton type="modified" label="Recent" />
-                    <SortButton type="name" label="Name" />
+                    <SortButton type="modified" label={t('Recent')} />
+                    <SortButton type="name" label={t('Name')} />
                 </View>
                 <View
                     style={{
@@ -123,7 +125,11 @@ const CharacterListHeader: React.FC<CharacterListHeaderProps> = ({ resultLength 
                         delayLongPress={5000}
                         onLongPress={() => {
                             setUseTagHider(!useTagHider)
-                            Logger.infoToast('Hider ' + (!useTagHider ? 'Enabled' : 'Disabled'))
+                            Logger.infoToast(
+                                t('Hider {{status}}', {
+                                    status: !useTagHider ? t('Enabled') : t('Disabled'),
+                                })
+                            )
                         }}
                     />
                 </View>
@@ -141,23 +147,23 @@ const CharacterListHeader: React.FC<CharacterListHeaderProps> = ({ resultLength 
                                 suggestions={data
                                     .sort((a, b) => b.tagCount - a.tagCount)
                                     .map((item) => item.tag)}
-                                label="Search By Tags"
+                                label={t('Search By Tags')}
                                 value={tagFilter}
                                 setValue={setTagFilter}
-                                placeholder="Filter Tags..."
+                                placeholder={t('Filter Tags...')}
                                 filterOnly
                                 showSuggestionsOnEmpty
                             />
                         )}
                         <ThemedTextInput
-                            label="Search By Name"
+                            label={t('Search By Name')}
                             containerStyle={{ flex: 0 }}
                             value={textFilter}
                             onChangeText={setTextFilter}
                             style={{
                                 color: resultLength === 0 ? color.text._700 : color.text._100,
                             }}
-                            placeholder="Name..."
+                            placeholder={t('Name...')}
                         />
                         {(textFilter || tagFilter.length > 0) && (
                             <Text
@@ -165,7 +171,7 @@ const CharacterListHeader: React.FC<CharacterListHeaderProps> = ({ resultLength 
                                     marginTop: 8,
                                     color: color.text._400,
                                 }}>
-                                Results: {resultLength}
+                                {t('Results: {{count}}', { count: resultLength })}
                             </Text>
                         )}
                     </Animated.View>

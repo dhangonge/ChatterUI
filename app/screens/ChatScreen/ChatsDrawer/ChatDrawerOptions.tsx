@@ -1,4 +1,5 @@
 import React, { ReactNode, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 
 import Alert from '@components/views/Alert'
@@ -16,6 +17,7 @@ type ChatEditPopupProps = {
 }
 
 const ChatEditPopup: React.FC<ChatEditPopupProps> = ({ item, children, onPress }) => {
+    const { t } = useTranslation()
     const [showRename, setShowRename] = useState<boolean>(false)
 
     const { charName, charId } = Characters.useCharacterStore(
@@ -36,12 +38,14 @@ const ChatEditPopup: React.FC<ChatEditPopupProps> = ({ item, children, onPress }
 
     const handleDeleteChat = (close: () => void) => {
         Alert.alert({
-            title: `Delete Chat`,
-            description: `Are you sure you want to delete '${item.name}'? This cannot be undone.`,
+            title: t('Delete Chat'),
+            description: t("Are you sure you want to delete '{{name}}'? This cannot be undone.", {
+                name: item.name,
+            }),
             buttons: [
-                { label: 'Cancel' },
+                { label: t('Cancel') },
                 {
-                    label: 'Delete Chat',
+                    label: t('Delete Chat'),
                     onPress: async () => {
                         await deleteChat(item.id)
                         if (charId && chatId === item.id) {
@@ -51,7 +55,9 @@ const ChatEditPopup: React.FC<ChatEditPopupProps> = ({ item, children, onPress }
                                 : await Chats.db.mutate.createChat(charId)
                             chatId && (await loadChat(chatId))
                         } else if (item.id === chatId) {
-                            Logger.errorToast(`Something went wrong with creating a default chat`)
+                            Logger.errorToast(
+                                t('Something went wrong with creating a default chat')
+                            )
                             unloadChat()
                         }
                         close()
@@ -64,12 +70,14 @@ const ChatEditPopup: React.FC<ChatEditPopupProps> = ({ item, children, onPress }
 
     const handleCloneChat = (close: () => void) => {
         Alert.alert({
-            title: `Clone Chat`,
-            description: `Are you sure you want to clone '${item.name}'?`,
+            title: t('Clone Chat'),
+            description: t("Are you sure you want to clone '{{name}}'?", {
+                name: item.name,
+            }),
             buttons: [
-                { label: 'Cancel' },
+                { label: t('Cancel') },
                 {
-                    label: 'Clone Chat',
+                    label: t('Clone Chat'),
                     onPress: async () => {
                         await Chats.db.mutate.cloneChatFromId(item.id)
                         close()
@@ -85,43 +93,43 @@ const ChatEditPopup: React.FC<ChatEditPopupProps> = ({ item, children, onPress }
         if (chat) {
             try {
                 await saveStringToDownload(JSON.stringify(chat), name, 'utf8')
-                Logger.infoToast(`File: ${name} saved to downloads!`)
+                Logger.infoToast(t('File: {{name}} saved to downloads!', { name }))
             } catch (e) {
-                Logger.errorToast('Failed to export chat')
+                Logger.errorToast(t('Failed to export chat'))
                 Logger.error(`${e}`)
             }
         } else {
-            Logger.errorToast('Chat is undefined')
+            Logger.errorToast(t('Chat is undefined'))
         }
         close()
     }
 
     const handleLinkUser = async (close: () => void) => {
         if (userId === item.user_id) {
-            Logger.warnToast('This User Is Already Set')
+            Logger.warnToast(t('This User Is Already Set'))
             close()
             return
         }
         if (!userId) {
-            Logger.errorToast('No Current User')
+            Logger.errorToast(t('No Current User'))
             close()
             return
         }
         await Chats.db.mutate.updateUser(item.id, userId)
-        Logger.infoToast(`Linked to User: ${userName}`)
+        Logger.infoToast(t('Linked to User: {{name}}', { name: userName }))
         close()
     }
 
     return (
         <>
             <InputSheet
-                title="Rename Chat"
+                title={t('Rename Chat')}
                 visible={showRename}
                 setVisible={setShowRename}
                 onConfirm={async (text) => {
                     await Chats.db.mutate.renameChat(item.id, text)
                 }}
-                verifyText={(text) => (text.length === 0 ? 'Name cannot be empty' : '')}
+                verifyText={(text) => (text.length === 0 ? t('Name cannot be empty') : '')}
                 defaultValue={item.name}
             />
             <ContextMenu
@@ -130,7 +138,7 @@ const ChatEditPopup: React.FC<ChatEditPopupProps> = ({ item, children, onPress }
                 onPress={onPress}
                 buttons={[
                     {
-                        label: 'Rename',
+                        label: t('Rename'),
                         icon: 'edit',
                         onPress: (close) => {
                             setShowRename(true)
@@ -138,26 +146,26 @@ const ChatEditPopup: React.FC<ChatEditPopupProps> = ({ item, children, onPress }
                         },
                     },
                     {
-                        label: 'Delete',
+                        label: t('Delete'),
                         icon: 'delete',
                         variant: 'warning',
                         onPress: handleDeleteChat,
                     },
                     {
-                        label: 'More',
+                        label: t('More'),
                         submenu: [
                             {
-                                label: 'Export',
+                                label: t('Export'),
                                 icon: 'download',
                                 onPress: handleExportChat,
                             },
                             {
-                                label: 'Clone',
+                                label: t('Clone'),
                                 icon: 'copy',
                                 onPress: handleCloneChat,
                             },
                             {
-                                label: 'Link User',
+                                label: t('Link User'),
                                 icon: 'user',
                                 onPress: handleLinkUser,
                             },

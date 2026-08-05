@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 
 import ContextMenu from '@components/views/ContextMenu'
@@ -13,6 +14,7 @@ type CharacterNewMenuProps = {
 }
 
 const CharacterNewMenu: React.FC<CharacterNewMenuProps> = ({ nowLoading, setNowLoading }) => {
+    const { t } = useTranslation()
     const { setCurrentCard } = Characters.useCharacterStore(
         useShallow((state) => ({
             setCurrentCard: state.setCard,
@@ -25,7 +27,7 @@ const CharacterNewMenu: React.FC<CharacterNewMenuProps> = ({ nowLoading, setNowL
 
     const handleCreateCharacter = async (text: string) => {
         if (!text) {
-            Logger.errorToast('Name Cannot Be Empty!')
+            Logger.errorToast(t('Name Cannot Be Empty!'))
             return
         }
         Characters.db.mutate.createCard(text).then(async (id) => {
@@ -42,10 +44,10 @@ const CharacterNewMenu: React.FC<CharacterNewMenuProps> = ({ nowLoading, setNowL
             <InputSheet
                 visible={showNewChar}
                 setVisible={setShowNewChar}
-                title="Create New Character"
+                title={t('Create New Character')}
                 onConfirm={handleCreateCharacter}
-                verifyText={(text) => (text.length === 0 ? 'Name cannot be empty' : '')}
-                placeholder="Name..."
+                verifyText={(text) => (text.length === 0 ? t('Name cannot be empty') : '')}
+                placeholder={t('Name...')}
                 autoFocus
             />
 
@@ -53,7 +55,7 @@ const CharacterNewMenu: React.FC<CharacterNewMenuProps> = ({ nowLoading, setNowL
                 triggerIcon="user-add"
                 buttons={[
                     {
-                        label: 'Import From File',
+                        label: t('Import From File'),
                         onPress: (close) => {
                             Characters.importCharacter()
                             close()
@@ -61,7 +63,7 @@ const CharacterNewMenu: React.FC<CharacterNewMenuProps> = ({ nowLoading, setNowL
                         icon: 'upload',
                     },
                     {
-                        label: 'Create Character',
+                        label: t('Create Character'),
                         onPress: (close) => {
                             setShowNewChar(true)
                             close()
